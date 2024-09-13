@@ -19,5 +19,9 @@ class TestTextNode(unittest.TestCase):
         node = TextNode("Boot.dev is great!", None, "https://www.boot.dev")
         self.assertIsNone(node.text_type)
 
+    def test_invalid_text_type(self):
+        node = TextNode("I strongly agree", "strong")
+        self.assertRaises(Exception)
+
 if __name__ == "__main__":
     unittest.main()
