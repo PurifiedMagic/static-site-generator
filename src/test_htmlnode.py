@@ -1,6 +1,6 @@
 import unittest
 
-from htmlnode import HTMLNode
+from htmlnode import HTMLNode, LeafNode
 
 class TestHTMLNode(unittest.TestCase):
 
@@ -58,6 +58,51 @@ class TestHTMLNode(unittest.TestCase):
         print(node.props_to_html())
         self.assertIsNot(node.props_to_html(), "")
 
+class TestLeafNode(unittest.TestCase):
+
+    def test_leaf_props(self):
+        node = LeafNode(
+            "span",
+            "Leaf node with props",
+            None,
+            {
+                "role": "heading",
+                "aria-level": "4"
+            }
+        )
+        node2 = LeafNode(
+            "span",
+            "Leaf node with no props",
+            None,
+            None
+        )
+        node3 = LeafNode(
+            "span",
+            "Leaf node with empty props dictionary",
+            None,
+            {}
+        )
+        print(f"{node.to_html()}\n{node2.to_html()}\n{node3.to_html()}")
+
+    def test_leaf_value_error(self):
+        node = LeafNode(
+            "h1",
+            None,
+            None,
+            None
+        )
+        self.assertRaises(ValueError)
+
+    def test_leaf_children_error(self):
+        node = LeafNode(
+            "strong",
+            "Strong tag should not have children",
+            [
+                "Invalid child"
+            ],
+            None
+        )
+        self.assertRaises(ValueError)
 
 if __name__ == "__main__":
     unittest.main()

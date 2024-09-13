@@ -9,7 +9,7 @@ class HTMLNode():
         raise NotImplementedError
     
     def props_to_html(self):
-        if self.props is None:
+        if self.props is None or self.props == 0:
             return ""
         return " ".join(
             list(
@@ -25,4 +25,16 @@ class HTMLNode():
               f"Child nodes: {self.children}",
               f"HTML node attributes: {self.props}"
               )
-    
+        
+class LeafNode(HTMLNode):
+    def __init__(self, tag, value, children=None, props=None):
+        super().__init__(tag, value, None, props)
+
+    def to_html(self):
+        if self.value is None:
+            raise ValueError("Value cannot be NoneType. All leaf nodes must have a value")
+        if self.tag is None:
+            return str(self.value)
+        if self.children is not None:
+            return ValueError("LeafNode cannot have children")
+        return f"<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>"
