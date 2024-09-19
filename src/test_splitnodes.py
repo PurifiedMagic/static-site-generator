@@ -117,3 +117,21 @@ class TestLinkNodes(unittest.TestCase):
         ]
 
         self.assertEqual(split_nodes_link(input), split_nodes_link(output))
+
+class TestCombinedNodes(unittest.TestCase):
+    def test_eq_combined(self):
+        input = "This is **text** with an *italic* word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
+        output = [
+            TextNode("This is ", "text"),
+            TextNode("text", "bold"),
+            TextNode(" with an ", "text"),
+            TextNode("italic", "italic"),
+            TextNode(" word and a ", "text"),
+            TextNode("code block", "code"),
+            TextNode(" and an ", "text"),
+            TextNode("obi wan image", "image", "https://i.imgur.com/fJRm4Vk.jpeg"),
+            TextNode(" and a ", "text"),
+            TextNode("link", "link", "https://boot.dev"),
+        ]
+
+        self.assertEqual(text_to_node(input), output)
