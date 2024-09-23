@@ -1,9 +1,7 @@
-from textnode import TextNode
-
 import re
 
 def markdown_to_blocks(markdown):
-    blocks = list(map(lambda m: m.strip(), markdown.split("\n")))
+    blocks = list(map(lambda m: m.strip(), markdown.split("\n\n")))
     for block in blocks:
         if block == "":
             blocks.pop(blocks.index(block))
@@ -20,4 +18,4 @@ def block_to_block_type(block):
         return "unordered_list"
     if re.match(r"^(\d{1,}\.\s)", block):
         return "ordered_list"
-    return "paragraph"    
+    return "paragraph"
