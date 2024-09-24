@@ -11,7 +11,7 @@ def main():
 def generate_website():
     public_path = "public"
     static_path = "static"
-    from_path = "content/index.md"
+    from_path = "content"
     template_path = "template.html"
 
     # Verify if 'static' directory exists
@@ -21,7 +21,7 @@ def generate_website():
 
     empty_public(public_path)
     copy_static(static_path, public_path)
-    generate_page(from_path, template_path, public_path)
+    generate_pages_recursive(from_path, template_path, public_path)
 
 # Empty contents of the 'public' directory
 def empty_public(path):
@@ -76,6 +76,22 @@ def generate_page(from_path, template_path, dest_path):
     with open(f"{dest_path}/index.html", "w") as index:
         index.write(template)
         
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+    for entry in os.listdir(dir_path_content):
+        path = os.path.join(dir_path_content, entry)
 
+        # Generate 'index.html' file in public from 'index.md' in 'content' (same nesting)
+        if os.path.isfile(path) and path[-3:] == ".md":
+            generate_page(path, template_path, dest_dir_path)
+            print(f"Copying \'{path}\' to \'{dest_dir_path}\'...")
+            shutil.copy(path, dest_dir_path)
+            print(f"Successfully copied \'{path}\'!")
+
+        # Copy directory from 'content' to 'public' and recurse through that directory
+        else:
+            make_dir = os.path.join(dest_dir_path, entry)
+            print(f"Copying \'{path}\' to \'{make_dir}\'...")
+            os.mkdir(make_dir)
+            generate_pages_recursive(path, template_path, make_dir)
 
 main()
